@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 896:
+/***/ 147:
 /***/ ((module) => {
 
 "use strict";
@@ -48,7 +48,9 @@ module.exports = require("fs");
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-const fs = __nccwpck_require__(896);
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+const fs = __nccwpck_require__(147);
 
 function lerArquivoEBuscarInformacoes(caminhoArquivo) {
   // Ler o conteúdo do arquivo
@@ -93,6 +95,8 @@ function run() {
 }
 
 run();
+
+})();
 
 module.exports = __webpack_exports__;
 /******/ })()
