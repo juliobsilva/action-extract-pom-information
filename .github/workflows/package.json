@@ -2,13 +2,7 @@
     "name": "read-pom-action",
     "version": "1.0.0",
     "scripts": {
-      "build": "tsc",
-      "prepare": "npm run build"
-    },
-    "devDependencies": {
-      "@types/node": "^14.x",
-      "@types/fs-extra": "^9.x",
-      "typescript": "^4.x"
+      "prepare": "echo 'No build needed for JavaScript.'"
     },
     "dependencies": {
       "@actions/core": "^1.x"
