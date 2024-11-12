@@ -10,5 +10,6 @@
   "license": "MIT",
   "devDependencies": {
     "@vercel/ncc": "^0.34.0"
-  }
+  },
+  "keywords": []
 }
