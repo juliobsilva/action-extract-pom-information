@@ -1,9 +1,7 @@
 {
     "name": "read-pom-action",
     "version": "1.0.0",
-    "scripts": {
-      "prepare": "echo 'No build needed for JavaScript.'"
-    },
+    "scripts": {},
     "dependencies": {
       "@actions/core": "^1.x"
     }
