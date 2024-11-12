@@ -1,9 +1,14 @@
 {
-    "name": "read-pom-action",
-    "version": "1.0.0",
-    "scripts": {},
-    "dependencies": {
-      "@actions/core": "^1.x"
-    }
+  "name": "read-pom-action",
+  "version": "1.0.0",
+  "description": "GitHub Action para extrair groupId, artifactId, version e name do pom.xml",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build index.js -o dist"
+  },
+  "author": "Seu Nome",
+  "license": "MIT",
+  "devDependencies": {
+    "@vercel/ncc": "^0.34.0"
   }
-  
+}

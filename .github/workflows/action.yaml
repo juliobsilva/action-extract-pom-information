@@ -1,19 +1,19 @@
-name: "Read and extract POM information"
-description: "Reads a pom.xml file and extracts groupId, artifactId, version, and name"
+name: "Read POM File"
+description: "Extracts groupId, artifactId, version, and name from pom.xml"
 inputs:
-  filePath:
+  path:
     description: "Path to the pom.xml file"
     required: true
     default: "pom.xml"
 outputs:
-  groupId: 
-    description: "Group ID extracted from the POM file"
-  artifactId: 
-    description: "Artifact ID extracted from the POM file"
-  version: 
-    description: "Version extracted from the POM file"
-  name: 
-    description: "Name extracted from the POM file"
+  groupId:
+    description: "The groupId found in pom.xml"
+  artifactId:
+    description: "The artifactId found in pom.xml"
+  version:
+    description: "The version found in pom.xml"
+  name:
+    description: "The name found in pom.xml"
 runs:
-  using: "node12"
-  main: "dist/index.js"
+  using: "node20"
+  main: "index.js"

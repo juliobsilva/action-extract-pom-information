@@ -1,46 +1,45 @@
-const core = require('@actions/core');
 const fs = require('fs');
 
-async function lerArquivoEBuscarInformacoes(caminhoArquivo) {
-    try {
-        // Leitura do conteúdo do arquivo
-        const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
+function lerArquivoEBuscarInformacoes(caminhoArquivo) {
+  // Ler o conteúdo do arquivo
+  const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
 
-        // Definindo os padrões regex para groupId, artifactId, version e name
-        const padraoGroupId = /<groupId>(.*?)<\/groupId>/g;
-        const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>/g;
-        const padraoVersion = /<version>(.*?)<\/version>/g;
-        const padraoName = /<name>(.*?)<\/name>/g;
+  // Definir os padrões de regex para groupId, artifactId, version e name
+  const padraoGroupId = /<groupId>(.*?)<\/groupId>/;
+  const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>/;
+  const padraoVersion = /<version>(.*?)<\/version>/;
+  const padraoName = /<name>(.*?)<\/name>/;
 
-        // Encontrar todas as ocorrências dos padrões
-        const groupIds = [...conteudo.matchAll(padraoGroupId)].map(match => match[1]);
-        const artifactIds = [...conteudo.matchAll(padraoArtifactId)].map(match => match[1]);
-        const versions = [...conteudo.matchAll(padraoVersion)].map(match => match[1]);
-        const names = [...conteudo.matchAll(padraoName)].map(match => match[1]);
+  // Encontrar a primeira ocorrência dos padrões
+  const groupId = conteudo.match(padraoGroupId)?.[1] || '';
+  const artifactId = conteudo.match(padraoArtifactId)?.[1] || '';
+  const version = conteudo.match(padraoVersion)?.[1] || '';
+  const name = conteudo.match(padraoName)?.[1] || '';
 
-        // Organizar as informações encontradas e setar os outputs
-        const informacoes = groupIds.map((groupId, index) => ({
-            groupId,
-            artifactId: artifactIds[index],
-            version: versions[index],
-            name: names[index]
-        }));
-
-        // Usar apenas o primeiro conjunto de informações para o output
-        if (informacoes.length > 0) {
-            const info = informacoes[0];
-            core.setOutput('groupId', info.groupId);
-            core.setOutput('artifactId', info.artifactId);
-            core.setOutput('version', info.version);
-            core.setOutput('name', info.name);
-        } else {
-            core.warning('Nenhuma informação encontrada no arquivo pom.xml');
-        }
-    } catch (error) {
-        core.setFailed(`Erro ao processar o arquivo: ${error.message}`);
-    }
+  return { groupId, artifactId, version, name };
 }
 
-// Executar a função principal
-const caminhoArquivo = core.getInput('filePath');
-lerArquivoEBuscarInformacoes(caminhoArquivo);
+// Função principal da action
+function run() {
+  try {
+    const caminhoArquivo = process.env.INPUT_PATH || 'pom.xml';
+    const { groupId, artifactId, version, name } = lerArquivoEBuscarInformacoes(caminhoArquivo);
+
+    // Exibir as informações encontradas no log
+    console.log(`groupId: ${groupId}`);
+    console.log(`artifactId: ${artifactId}`);
+    console.log(`version: ${version}`);
+    console.log(`name: ${name}\n`);
+
+    // Configurar outputs
+    console.log(`::set-output name=groupId::${groupId}`);
+    console.log(`::set-output name=artifactId::${artifactId}`);
+    console.log(`::set-output name=version::${version}`);
+    console.log(`::set-output name=name::${name}`);
+  } catch (error) {
+    console.error(`Erro ao processar o arquivo: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+run();
