@@ -6,7 +6,7 @@
   "scripts": {
     "build": "ncc build index.js -o dist"
   },
-  "author": "Seu Nome",
+  "author": "Julio Cesar",
   "license": "MIT",
   "devDependencies": {
     "@vercel/ncc": "^0.34.0"
