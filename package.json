@@ -9,7 +9,6 @@
   "author": "Julio Cesar",
   "license": "MIT",
   "devDependencies": {
-    "@actions/core": "^1.11.1",
     "@vercel/ncc": "^0.34.0"
   },
   "keywords": []
