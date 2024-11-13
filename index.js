@@ -1,5 +1,4 @@
 const fs = require('fs');
-const core = require('@actions/core');
 const outputPath = process.env.GITHUB_OUTPUT;
 
 function lerArquivoEBuscarInformacoes(caminhoArquivo) {
@@ -34,10 +33,10 @@ function run() {
     console.log(`name: ${name}\n`);
 
     // Configurar outputs
-    core.setOutput("groupId", groupId);
-    core.setOutput("artifactId", artifactId);
-    core.setOutput("version", version);
-    core.setOutput("name", name);
+    fs.appendFileSync(outputPath, `groupId=${groupId}\n`);
+    fs.appendFileSync(outputPath, `artifactId=${artifactId}\n`);
+    fs.appendFileSync(outputPath, `version=${version}\n`);
+    fs.appendFileSync(outputPath, `name=${name}\n`);
   } catch (error) {
     console.error(`Erro ao processar o arquivo: ${error.message}`);
     process.exit(1);
