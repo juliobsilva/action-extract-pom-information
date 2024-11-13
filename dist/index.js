@@ -56,10 +56,11 @@ function lerArquivoEBuscarInformacoes(caminhoArquivo) {
   const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
 
   // Definir os padrões de regex para groupId, artifactId, version e name
-  const padraoGroupId = /<groupId>(.*?)<\/groupId>/;
-  const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>/;
-  const padraoVersion = /<version>(.*?)<\/version>/;
-  const padraoName = /<name>(.*?)<\/name>/;
+  const padraoGroupId = /<groupId>(.*?)<\/groupId>(?![\s\S]*<\/parent>)/;
+  const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>(?![\s\S]*<\/parent>)/;
+  const padraoVersion = /<version>(.*?)<\/version>(?![\s\S]*<\/parent>)/;
+  const padraoName = /<name>(.*?)<\/name>(?![\s\S]*<\/parent>)/;
+
 
   // Encontrar a primeira ocorrência dos padrões
   const groupId = conteudo.match(padraoGroupId)?.[1] || '';
