@@ -49,6 +49,7 @@ module.exports = require("fs");
 /************************************************************************/
 var __webpack_exports__ = {};
 const fs = __nccwpck_require__(896);
+const outputPath = process.env.GITHUB_OUTPUT;
 
 function lerArquivoEBuscarInformacoes(caminhoArquivo) {
   // Ler o conteúdo do arquivo
@@ -82,10 +83,10 @@ function run() {
     console.log(`name: ${name}\n`);
 
     // Configurar outputs
-    console.log(`::set-output name=groupId::${groupId}`);
-    console.log(`::set-output name=artifactId::${artifactId}`);
-    console.log(`::set-output name=version::${version}`);
-    console.log(`::set-output name=name::${name}`);
+    fs.appendFileSync(outputPath, `groupId=${groupId}\n`);
+    fs.appendFileSync(outputPath, `artifactId=${artifactId}\n`);
+    fs.appendFileSync(outputPath, `version=${version}\n`);
+    fs.appendFileSync(outputPath, `name=${name}\n`);
   } catch (error) {
     console.error(`Erro ao processar o arquivo: ${error.message}`);
     process.exit(1);
