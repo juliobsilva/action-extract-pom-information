@@ -55,12 +55,22 @@ function lerArquivoEBuscarInformacoes(caminhoArquivo) {
   // Ler o conteúdo do arquivo
   const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
 
-  // Definir os padrões de regex para groupId, artifactId, version e name
-  const padraoGroupId = /<groupId>(.*?)<\/groupId>(?![\s\S]*<\/parent>)/;
-  const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>(?![\s\S]*<\/parent>)/;
-  const padraoVersion = /<version>(.*?)<\/version>(?![\s\S]*<\/parent>)/;
-  const padraoName = /<name>(.*?)<\/name>(?![\s\S]*<\/parent>)/;
+  let padraoGroupId, padraoArtifactId, padraoVersion, padraoName;
 
+  // Verificar o tipo de arquivo com base no nome ou conteúdo
+  if (caminhoArquivo.endsWith('build.gradle')) {
+    // Definir os padrões de regex para arquivos Gradle
+    padraoGroupId = /group\s*=\s*['"](.+?)['"]/;
+    padraoArtifactId = /rootProject\.name\s*=\s*['"](.+?)['"]/;
+    padraoVersion = /version\s*=\s*['"](.+?)['"]/;
+    padraoName = /name\s*=\s*['"](.+?)['"]/;
+  } else {
+    // Definir os padrões de regex para arquivos Maven (pom.xml)
+    padraoGroupId = /<groupId>(.*?)<\/groupId>(?![\s\S]*<\/parent>)/;
+    padraoArtifactId = /<artifactId>(.*?)<\/artifactId>(?![\s\S]*<\/parent>)/;
+    padraoVersion = /<version>(.*?)<\/version>(?![\s\S]*<\/parent>)/;
+    padraoName = /<name>(.*?)<\/name>(?![\s\S]*<\/parent>)/;
+  }
 
   // Encontrar a primeira ocorrência dos padrões
   const groupId = conteudo.match(padraoGroupId)?.[1] || '';
