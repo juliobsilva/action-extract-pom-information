@@ -55,30 +55,33 @@ function lerArquivoEBuscarInformacoes(caminhoArquivo) {
   // Ler o conteúdo do arquivo
   const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
 
-  let padraoGroupId, padraoArtifactId, padraoVersion, padraoName;
-
-  // Verificar o tipo de arquivo com base no nome ou conteúdo
   if (caminhoArquivo.endsWith('build.gradle')) {
-    // Definir os padrões de regex para arquivos Gradle
-    padraoGroupId = /group\s*=\s*['"](.+?)['"]/;
-    padraoArtifactId = /rootProject\.name\s*=\s*['"](.+?)['"]/;
-    padraoVersion = /version\s*=\s*['"](.+?)['"]/;
-    padraoName = /name\s*=\s*['"](.+?)['"]/;
+    // Regex para arquivos Gradle
+    const padraoGroup = /group\s*=\s*['"](.+?)['"]/;
+    const padraoVersion = /version\s*=\s*['"](.+?)['"]/;
+
+    // Buscar as informações
+    const groupId = conteudo.match(padraoGroup)?.[1] || 'Não encontrado';
+    const version = conteudo.match(padraoVersion)?.[1] || 'Não encontrado';
+
+    return { groupId, artifactId: 'Não aplicável', version, name: 'Não aplicável' };
+  } else if (caminhoArquivo.endsWith('pom.xml')) {
+    // Regex para arquivos Maven (pom.xml)
+    const padraoGroupId = /<groupId>(.*?)<\/groupId>(?![\s\S]*<\/parent>)/;
+    const padraoArtifactId = /<artifactId>(.*?)<\/artifactId>(?![\s\S]*<\/parent>)/;
+    const padraoVersion = /<version>(.*?)<\/version>(?![\s\S]*<\/parent>)/;
+    const padraoName = /<name>(.*?)<\/name>(?![\s\S]*<\/parent>)/;
+
+    // Buscar as informações
+    const groupId = conteudo.match(padraoGroupId)?.[1] || 'Não encontrado';
+    const artifactId = conteudo.match(padraoArtifactId)?.[1] || 'Não encontrado';
+    const version = conteudo.match(padraoVersion)?.[1] || 'Não encontrado';
+    const name = conteudo.match(padraoName)?.[1] || 'Não encontrado';
+
+    return { groupId, artifactId, version, name };
   } else {
-    // Definir os padrões de regex para arquivos Maven (pom.xml)
-    padraoGroupId = /<groupId>(.*?)<\/groupId>(?![\s\S]*<\/parent>)/;
-    padraoArtifactId = /<artifactId>(.*?)<\/artifactId>(?![\s\S]*<\/parent>)/;
-    padraoVersion = /<version>(.*?)<\/version>(?![\s\S]*<\/parent>)/;
-    padraoName = /<name>(.*?)<\/name>(?![\s\S]*<\/parent>)/;
+    throw new Error('Tipo de arquivo não suportado. Use build.gradle ou pom.xml.');
   }
-
-  // Encontrar a primeira ocorrência dos padrões
-  const groupId = conteudo.match(padraoGroupId)?.[1] || '';
-  const artifactId = conteudo.match(padraoArtifactId)?.[1] || '';
-  const version = conteudo.match(padraoVersion)?.[1] || '';
-  const name = conteudo.match(padraoName)?.[1] || '';
-
-  return { groupId, artifactId, version, name };
 }
 
 // Função principal da action
